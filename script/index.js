@@ -8,33 +8,18 @@ function loadCategories() {
         .then((data) => displayCategories(data.categories));
 }
 
-
-
-// {
-//     "category_id": "1003",
-//     "video_id": "aaac",
-//     "thumbnail": "https://i.ibb.co/NTncwqH/luahg-at-pain.jpg",
-//     "title": "Laugh at My Pain",
-//     "authors": [
-//         {
-//             "profile_picture": "https://i.ibb.co/XVHM7NP/kevin.jpg",
-//             "profile_name": "Kevin Hart",
-//             "verified": false
-//         }
-//     ],
-//     "others": {
-//         "views": "1.1K",
-//         "posted_date": "13885"
-//     },
-//     "description": "Comedian Kevin Hart brings his unique brand of humor to life in 'Laugh at My Pain.' With 1.1K views, this show offers a hilarious and candid look into Kevin's personal stories, struggles, and triumphs. It's a laugh-out-loud experience filled with sharp wit, clever insights, and a relatable charm that keeps audiences coming back for more."
-// }
-
-
-
 function loadVideos() {
     fetch("https://openapi.programming-hero.com/api/phero-tube/videos")
         .then((res => res.json()))
         .then((data) => displayVideos(data.videos));
+}
+
+const loadCategoriesVideos = (id) => {
+    const url =`https://openapi.programming-hero.com/api/phero-tube/category/${id}`;
+    console.log(url);
+    fetch(url)
+    .then(res=>res.json())
+    .then(data=>displayVideos(data.category))
 }
 
 function displayCategories(categories) {
@@ -48,7 +33,7 @@ function displayCategories(categories) {
         // create element 
         const categoryDiv = document.createElement("div");
         categoryDiv.innerHTML = `
-    <button class="btn btn-sm hover:bg-[#FF1F3D] hover:text-white">${cat.category}</button>
+    <button onclick="loadCategoriesVideos(${cat.category_id})" class="btn btn-sm hover:bg-[#FF1F3D] hover:text-white">${cat.category}</button>
     `
         // Append the Element
         categoryContainer.appendChild(categoryDiv);
@@ -57,6 +42,8 @@ function displayCategories(categories) {
 
 const displayVideos = (videos) => {
     const videoContainer = document.getElementById("video-container");
+
+    videoContainer.innerHTML = "" ;
 
     videos.forEach(video => {
         console.log(video);
@@ -92,4 +79,3 @@ const displayVideos = (videos) => {
 }
 
 loadCategories();
-loadVideos();
